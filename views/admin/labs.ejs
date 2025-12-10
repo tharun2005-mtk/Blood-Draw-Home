@@ -1,0 +1,47 @@
+<h1>Manage Labs</h1>
+
+<% if (labs.length > 0) { %>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>License Number</th>
+                <th>Status</th>
+                <th>Registered</th>
+                <!-- <th>Actions</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <% labs.forEach(lab => { %>
+                <tr>
+                    <td><%= lab.name %></td>
+                    <td><%= lab.email %></td>
+                    <td><%= lab.phone || 'N/A' %></td>
+                    <td><%= lab.licenseNumber || 'N/A' %></td>
+                    <td>
+                        <% if (lab.isActive) { %>
+                            <span class="status-completed">Active</span>
+                        <% } else { %>
+                            <span class="status-cancelled">Inactive</span>
+                        <% } %>
+                    </td>
+                    <td><%= lab.createdAt.toLocaleDateString() %></td>
+                    <!-- <td>
+                        <form action="/admin/users/<%= lab._id %>/toggle-status" method="POST" style="display: inline;">
+                            <input type="hidden" name="_method" value="PUT">
+                            <% if (lab.isActive) { %>
+                                <button type="submit" class="btn btn-warning btn-small">Deactivate</button>
+                            <% } else { %>
+                                <button type="submit" class="btn btn-success btn-small">Activate</button>
+                            <% } %>
+                        </form>
+                    </td> -->
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+<% } else { %>
+    <p>No labs found.</p>
+<% } %>

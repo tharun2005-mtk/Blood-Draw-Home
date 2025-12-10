@@ -1,0 +1,66 @@
+<h1>My Test Results</h1>
+
+<% if (testResults && testResults.length > 0) { %>
+  <div class="results-grid">
+    <% testResults.forEach(result => { %>
+      <div class="result-card">
+        <div class="result-header">
+          <h3>
+            <% if (result.tests && result.tests.length > 0) { %>
+              <%= result.tests[0].name %>
+            <% } else { %>
+              Unknown Test
+            <% } %>
+          </h3>
+
+          <span class="status-pill status-<%= result.status %>">
+            <%= result.status %>
+          </span>
+        </div>
+
+        <div class="result-body">
+          <p>
+            <strong>Status:</strong>
+            <span class="status-<%= result.status %>">
+              <%= result.status %>
+            </span>
+          </p>
+
+          <p>
+            <strong>Result:</strong>
+            <% if (result.result) { %>
+              <%= result.result %>
+            <% } else { %>
+              Not available yet.
+            <% } %>
+          </p>
+
+          <% if (result.notes) { %>
+            <p>
+              <strong>Notes:</strong>
+              <%= result.notes %>
+            </p>
+          <% } %>
+
+          <% if (result.sampleCollectedAt) { %>
+            <p>
+              <strong>Sample Collected:</strong>
+              <%= result.sampleCollectedAt.toLocaleString() %>
+            </p>
+          <% } %>
+        </div>
+
+        <% if (result.reportFile) { %>
+          <div class="result-footer">
+            <a href="/reports/<%= result.reportFile %>" target="_blank"
+               class="btn btn-secondary btn-small">
+              View PDF Report
+            </a>
+          </div>
+        <% } %>
+      </div>
+    <% }) %>
+  </div>
+<% } else { %>
+  <p>You don't have any completed test results yet.</p>
+<% } %>

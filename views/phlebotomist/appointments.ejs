@@ -1,0 +1,76 @@
+<h1>My Appointments</h1>
+
+<% if (appointments && appointments.length > 0) { %>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Patient Name</th>
+        <th>Test</th>
+        <th>Appointment Date</th>
+        <th>Status</th>
+        <th>Sample Collected</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% appointments.forEach(appointment => { %>
+        <tr>
+          <td><%= appointment.user && appointment.user.name %></td>
+
+          <td>
+            <%= (appointment.tests || [])
+                  .map(t => t.name)
+                  .join(', ') || 'No tests' %>
+          </td>
+
+          <td>
+            <%= appointment.appointmentDate.toLocaleDateString() %><br>
+            <small><%= appointment.appointmentDate.toLocaleTimeString() %></small>
+          </td>
+
+          <td>
+            <span class="status-<%= appointment.status %>">
+              <%= appointment.status %>
+            </span>
+          </td>
+
+          <td>
+            <% if (appointment.sampleCollected) { %>
+              <span class="status-completed">Yes</span><br>
+              <small>
+                <%= appointment.sampleCollectedAt
+                      ? appointment.sampleCollectedAt.toLocaleString()
+                      : '' %>
+              </small>
+            <% } else { %>
+              <span class="status-pending">No</span>
+            <% } %>
+          </td>
+
+          <td>
+            <% // show Collect Sample button only if scheduled and not yet collected %>
+            <% if (!appointment.sampleCollected && appointment.status === 'scheduled') { %>
+              <form action="/phlebotomist/collect-sample" method="POST" style="display:inline;">
+                <input type="hidden" name="appointmentId" value="<%= appointment._id %>">
+                <button type="submit" class="btn btn-success btn-small">
+                  Collect Sample
+                </button>
+              </form>
+            <% } else if (appointment.sampleCollected) { %>
+              <span class="status-completed">Completed</span>
+            <% } else { %>
+              <span class="status-pending">Pending Action</span>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } else { %>
+  <div class="empty-state">
+    <p>No appointments found.</p>
+    <a href="/phlebotomist/dashboard" class="btn btn-primary">
+      Check Available Appointments
+    </a>
+  </div>
+<% } %>

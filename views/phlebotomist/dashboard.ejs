@@ -1,0 +1,93 @@
+<h1>Phlebotomist Dashboard</h1>
+
+<div class="dashboard-grid">
+
+    <!-- LEFT CARD: My Appointments (assigned to this phlebotomist) -->
+    <div class="card">
+        <h3>My Appointments</h3>
+
+        <% if (todayAppointments && todayAppointments.length > 0) { %>
+            <div class="appointment-list">
+                <% todayAppointments.forEach(function(appointment) { %>
+                    <div class="appointment-item">
+                        <strong><%= appointment.user.name %></strong>
+
+                        <p>
+                            Test:
+                            <% if (appointment.tests && appointment.tests.length > 0) { %>
+                                <%= appointment.tests.map(function(t){ return t.name; }).join(', ') %>
+                            <% } else { %>
+                                No tests
+                            <% } %>
+                        </p>
+
+                        <p>Date: <%= new Date(appointment.appointmentDate).toLocaleDateString() %></p>
+                        <p>Time: <%= new Date(appointment.appointmentDate).toLocaleTimeString() %></p>
+                        <p>Blood Group: <%= appointment.user.bloodGroup || 'Not specified' %></p>
+                        <p>Phone: <%= appointment.user.phone || 'N/A' %></p>
+
+                        <% if (!appointment.sampleCollected) { %>
+                            <!-- Collect sample: POST /phlebotomist/collect-sample -->
+                            <form action="/phlebotomist/collect-sample" method="POST">
+                                <input type="hidden" name="appointmentId" value="<%= appointment._id %>">
+                                <button type="submit" class="btn btn-success btn-small">
+                                    Mark Sample Collected / Send to Lab
+                                </button>
+                            </form>
+                        <% } else { %>
+                            <span class="status-completed">✓ Sample Collected</span>
+                            <% if (appointment.sampleCollectedAt) { %>
+                                <p><small>
+                                    Collected:
+                                    <%= new Date(appointment.sampleCollectedAt).toLocaleString() %>
+                                </small></p>
+                            <% } else { %>
+                                <p><small>Collected time not recorded</small></p>
+                            <% } %>
+                        <% } %>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p>No appointments assigned to you yet.</p>
+        <% } %>
+    </div>
+
+    <!-- RIGHT CARD: Available Appointments (unassigned) -->
+    <div class="card">
+        <h3>Available Appointments</h3>
+
+        <% if (pendingAppointments && pendingAppointments.length > 0) { %>
+            <div class="appointment-list">
+                <% pendingAppointments.forEach(function(appointment) { %>
+                    <div class="appointment-item">
+                        <strong><%= appointment.user.name %></strong>
+
+                        <p>
+                            Test:
+                            <% if (appointment.tests && appointment.tests.length > 0) { %>
+                                <%= appointment.tests.map(function(t){ return t.name; }).join(', ') %>
+                            <% } else { %>
+                                No tests
+                            <% } %>
+                        </p>
+
+                        <p>Date: <%= new Date(appointment.appointmentDate).toLocaleDateString() %></p>
+                        <p>Time: <%= new Date(appointment.appointmentDate).toLocaleTimeString() %></p>
+
+                        <!-- Accept appointment: POST /phlebotomist/accept-appointment -->
+                        <form action="/phlebotomist/accept-appointment" method="POST">
+                            <input type="hidden" name="appointmentId" value="<%= appointment._id %>">
+                            <button type="submit" class="btn btn-primary btn-small">
+                                Accept Appointment
+                            </button>
+                        </form>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p>No available appointments.</p>
+        <% } %>
+    </div>
+
+</div>

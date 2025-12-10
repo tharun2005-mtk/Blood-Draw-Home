@@ -1,0 +1,36 @@
+<div class="hero-section">
+    <h1>Welcome to Health Sample Handling Portal</h1>
+    <p>Efficient management of health samples, appointments, and results</p>
+
+    <div class="hero-actions">
+        <% if (!user) { %>
+            <a href="/login" class="btn btn-primary btn-large">Login</a>
+            <a href="/register" class="btn btn-secondary btn-large">Register as User</a>
+            <a href="/register-phlebotomist" class="btn btn-secondary btn-large">Register as Phlebotomist</a>
+        <% } else { %>
+            <a href="/<%= user.role %>/dashboard" class="btn btn-primary btn-large">Go to Dashboard</a>
+        <% } %>
+    </div>
+</div>
+
+<div class="features-section">
+    <h2>Our Services</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>Easy Appointment Booking</h3>
+            <p>Book blood tests online with easy scheduling</p>
+        </div>
+        <div class="feature-card">
+            <h3>Sample Collection</h3>
+            <p>Professional phlebotomists for sample collection</p>
+        </div>
+        <div class="feature-card">
+            <h3>Quick Results</h3>
+            <p>Get your test results quickly and securely</p>
+        </div>
+        <div class="feature-card">
+            <h3>Professional Labs</h3>
+            <p>Accurate testing by certified laboratories</p>
+        </div>
+    </div>
+</div>

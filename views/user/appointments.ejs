@@ -1,0 +1,115 @@
+<!-- <h1>My Appointments</h1>
+
+<div class="action-bar">
+    <a href="/user/appointments/book" class="btn btn-primary">Book New Appointment</a>
+</div>
+
+<% if (appointments.length > 0) { %>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Test Name</th>
+                <th>Appointment Date</th>
+                <th>Status</th>
+                <th>Phlebotomist</th>
+                <th>Sample Collected</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% appointments.forEach(appointment => { %>
+                <tr>
+                    <td><%= appointment.testss && appointment.testss.length>0 ? appointment.testss.map(t => t.name).join(', ') : "N/A" %></td>
+                    <td><%= appointment.appointmentDate.toLocaleDateString() %></td>
+                    <td><span class="status-<%= appointment.status %>"><%= appointment.status %></span></td>
+                    <td>
+                        <% if (appointment.phlebotomist) { %>
+                            <%= appointment.phlebotomist.name %>
+                        <% } else { %>
+                            Not assigned
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (appointment.sampleCollected) { %>
+                            <span class="status-completed">Yes</span>
+                        <% } else { %>
+                            <span class="status-pending">No</span>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (appointment.result) { %>
+                            <a href="/user/test-results" class="btn btn-success btn-small">View Result</a>
+                        <% } else { %>
+                            <span class="status-pending">Pending</span>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+<% } else { %>
+    <div class="empty-state">
+        <p>No appointments found.</p>
+        <a href="/user/appointments/book" class="btn btn-primary">Book Your First Appointment</a>
+    </div>
+<% } %> -->
+
+<h1>My Appointments</h1>
+
+<div class="action-bar">
+  <a href="/user/appointments/book" class="btn btn-primary">Book New Appointment</a>
+</div>
+
+<% if (appointments.length > 0) { %>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Lab Name</th>
+        <th>Test Names</th>
+        <th>Total Price</th>
+        <th>Appointment Date</th>
+        <th>Status</th>
+        <th>Phlebotomist</th>
+        <th>Sample Collected</th>
+        <th>Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% appointments.forEach(appointment => { %>
+        <tr>
+          <td><%= appointment.lab ? appointment.lab.name : "N/A" %></td>
+          <td><%= appointment.testss && appointment.testss.length > 0 ? appointment.testss.map(t => t.name).join(', ') : "N/A" %></td>
+          <!-- <td>₹<%= (typeof appointment.totalPrice === 'number' && !isNaN(appointment.totalPrice)) ? (typeof appointment.totalPrice === 'number' && !isNaN(appointment.totalPrice)) ? (typeof appointment.totalPrice === 'number' && !isNaN(appointment.totalPrice)) ? appointment.totalPrice.toFixed(2) : '0.00' : '0.00' : '0.00' %></td> -->
+           <td>₹<%= appointment.totalPrice ? (typeof appointment.totalPrice === 'number' && !isNaN(appointment.totalPrice)) ? (typeof appointment.totalPrice === 'number' && !isNaN(appointment.totalPrice)) ? appointment.totalPrice.toFixed(2) : '0.00' : '0.00' : '0.00' %></td>
+
+          <td>
+            <%= appointment.appointmentDate ? 
+                appointment.appointmentDate.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) 
+                : 'N/A' %>
+          </td>
+          <td><span class="status-<%= appointment.status %>"><%= appointment.status %></span></td>
+          <td><%= appointment.phlebotomist ? appointment.phlebotomist.name : "Not assigned" %></td>
+          <td>
+            <% if (appointment.sampleCollected) { %>
+              <span class="status-completed">Yes</span>
+            <% } else { %>
+              <span class="status-pending">No</span>
+            <% } %>
+          </td>
+          <td>
+            <% if (appointment.result) { %>
+              <a href="/user/test-results" class="btn btn-success btn-small">View Result</a>
+            <% } else { %>
+              <span class="status-pending">Pending</span>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } else { %>
+  <div class="empty-state">
+    <p>No appointments found.</p>
+    <a href="/user/appointments/book" class="btn btn-primary">Book Your First Appointment</a>
+  </div>
+<% } %>

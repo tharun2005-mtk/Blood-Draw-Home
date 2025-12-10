@@ -1,0 +1,25 @@
+<nav class="navbar">
+    <div class="nav-brand">
+        <h2>Blood Test Management</h2>
+    </div>
+    <div class="nav-links">
+        <span class="welcome">Welcome, <%= user.name %> (<%= user.role %>)</span>
+        <a href="/<%= user.role %>/dashboard" class="nav-link">Dashboard</a>
+        
+        <% if (user.role === 'admin') { %>
+            <a href="/admin/users" class="nav-link">Users</a>
+            <a href="/admin/phlebotomists" class="nav-link">Phlebotomists</a>
+            <a href="/admin/labs" class="nav-link">Labs</a>
+        <% } else if (user.role === 'user') { %>
+            <a href="/user/appointments" class="nav-link">Appointments</a>
+            <a href="/user/test-results" class="nav-link">Test Results</a>
+            <a href="/user/profile" class="nav-link">Profile</a>
+        <% } else if (user.role === 'phlebotomist') { %>
+            <a href="/phlebotomist/appointments" class="nav-link">Appointments</a>
+        <% } else if (user.role === 'lab') { %>
+            <a href="/lab/tests" class="nav-link">Tests</a>
+        <% } %>
+        
+        <a href="/logout" class="nav-link logout">Logout</a>
+    </div>
+</nav>

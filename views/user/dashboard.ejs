@@ -1,0 +1,45 @@
+<h1>User Dashboard</h1>
+
+<div class="dashboard-actions">
+    <a href="/user/appointments/book" class="btn btn-primary">Book New Appointment</a>
+    <a href="/user/test-results" class="btn btn-success">View Test Results</a>
+</div>
+
+<div class="dashboard-grid">
+    <div class="card">
+        <h3>Upcoming Appointments</h3>
+        <% if (upcomingAppointments.length > 0) { %>
+            <div class="appointment-list">
+                <% upcomingAppointments.forEach(appointment => { %>
+                    <div class="appointment-item">
+                        <!-- <p><strong>Tests:</strong> <%= appointment.testss && appointment.testss.length>0 ? appointment.testss.map(t => t.name).join(', ') : 'N/A' %> -->
+                        <p>Date: <%= appointment.appointmentDate.toLocaleDateString() %></p>
+                        <p>Status: <span class="status-<%= appointment.status %>"><%= appointment.status %></span></p>
+                        <% if (appointment.phlebotomist) { %>
+                            <p>Phlebotomist: <%= appointment.phlebotomist.name %></p>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>No upcoming appointments.</p>
+        <% } %>
+    </div>
+
+    <div class="card">
+        <h3>Recent Tests</h3>
+        <% if (recentTests.length > 0) { %>
+            <div class="test-list">
+                <% recentTests.forEach(test => { %>
+                    <div class="test-item">
+                        <!-- <p><strong>Tests:</strong> <%= test.test && test.test.length>0 ? test.test.map(t => t.name).join(', ') : 'N/A' %> -->
+                        <p>Date: <%= test.createdAt.toLocaleDateString() %></p>
+                        <p>Status: <span class="status-<%= test.status %>"><%= test.status %></span></p>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>No recent tests.</p>
+        <% } %>
+    </div>
+</div>

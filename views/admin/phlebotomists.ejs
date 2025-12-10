@@ -1,0 +1,49 @@
+<h1>Manage Phlebotomists</h1>
+
+<% if (phlebotomists.length > 0) { %>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Specialization</th>
+                <th>License Number</th>
+                <th>Status</th>
+                <th>Registered</th>
+                <!-- <th>Actions</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <% phlebotomists.forEach(phlebotomist => { %>
+                <tr>
+                    <td><%= phlebotomist.name %></td>
+                    <td><%= phlebotomist.email %></td>
+                    <td><%= phlebotomist.phone || 'N/A' %></td>
+                    <td><%= phlebotomist.specialization || 'N/A' %></td>
+                    <td><%= phlebotomist.licenseNumber || 'N/A' %></td>
+                    <td>
+                        <% if (phlebotomist.isActive) { %>
+                            <span class="status-completed">Active</span>
+                        <% } else { %>
+                            <span class="status-cancelled">Inactive</span>
+                        <% } %>
+                    </td>
+                    <td><%= phlebotomist.createdAt.toLocaleDateString() %></td>
+                    <!-- <td>
+                        <form action="/admin/users/<%= phlebotomist._id %>/toggle-status" method="POST" style="display: inline;">
+                            <input type="hidden" name="_method" value="PUT">
+                            <% if (phlebotomist.isActive) { %>
+                                <button type="submit" class="btn btn-warning btn-small">Deactivate</button>
+                            <% } else { %>
+                                <button type="submit" class="btn btn-success btn-small">Activate</button>
+                            <% } %>
+                        </form>
+                    </td> -->
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+<% } else { %>
+    <p>No phlebotomists found.</p>
+<% } %>

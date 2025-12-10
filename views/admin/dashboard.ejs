@@ -1,0 +1,120 @@
+<h1>Admin Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Total Users</h3>
+        <p class="stat-number"><%= usersCount %></p>
+    </div>
+    <div class="stat-card">
+        <h3>Phlebotomists</h3>
+        <p class="stat-number"><%= phlebotomistsCount %></p>
+    </div>
+    <div class="stat-card">
+        <h3>Labs</h3>
+        <p class="stat-number"><%= labsCount %></p>
+    </div>
+    <div class="stat-card">
+        <h3>Tests</h3>
+        <p class="stat-number"><%= testsCount %></p>
+    </div>
+    <div class="stat-card">
+        <h3>Appointments</h3>
+        <p class="stat-number"><%= appointmentsCount %></p>
+    </div>
+</div>
+
+<div class="recent-section">
+    <h2>Recent Appointments</h2>
+    <% if (recentAppointments.length > 0) { %>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Test</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% recentAppointments.forEach(appointment => { %>
+                    <tr>
+                        <td>
+                            <% if (appointment.user && appointment.user.name) { %>
+                                <%= appointment.user.name %>
+                            <% } else { %>
+                                <span class="text-muted">User Deleted</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (appointment.tests && appointment.tests.name) { %>
+                                <%= appointment.tests.name %>
+                            <% } else { %>
+                                <span class="text-muted">Test Deleted</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <% if (appointment.appointmentDate) { %>
+                                <%= appointment.appointmentDate.toLocaleDateString() %>
+                            <% } else { %>
+                                <span class="text-muted">Not set</span>
+                            <% } %>
+                        </td>
+                        <td><span class="status-<%= appointment.status || 'pending' %>"><%= appointment.status || 'pending' %></span></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No recent appointments found.</p>
+    <% } %>
+</div>
+<!-- Add this section after the recent appointments -->
+<div class="report-section">
+    <h2>Generate Reports</h2>
+    
+    <div class="report-actions">
+        <div class="report-card">
+            <h3>Appointments Report</h3>
+            <form action="/reports/appointments" method="GET" class="report-form">
+                <div class="form-group">
+                    <label for="status">Filter by Status:</label>
+                    <select id="status" name="status">
+                        <option value="all">All Appointments</option>
+                        <option value="pending">Pending</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="endDate">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    📊 Generate Appointments Report
+                </button>
+            </form>
+        </div>
+        
+        <div class="report-card">
+            <h3>Quick Reports</h3>
+            <div class="quick-reports">
+                <a href="/reports/appointments?status=completed" class="btn btn-success">
+                    ✅ Completed Tests Report
+                </a>
+                <a href="/reports/appointments?status=pending" class="btn btn-warning">
+                    ⏳ Pending Appointments Report
+                </a>
+                <a href="/reports/appointments" class="btn btn-info">
+                    📋 Full Appointments Report
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

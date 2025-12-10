@@ -1,0 +1,225 @@
+<!-- <h1>Book New Appointment</h1>
+
+<form action="/user/appointments" method="POST" class="appointment-form">
+    <div class="form-group">
+        <label for="testId">Select Test:</label>
+        <select id="tests" name="tests" multiple required>
+            <% tests.forEach(test => { %>
+                <option value="<%= test._id %>">
+                    <%= test.name %> - ₹<%= test.price %> (<%= test.duration %> hours)
+                </option>
+            <% }) %>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="appointmentDate">Appointment Date:</label>
+        <input type="datetime-local" id="appointmentDate" name="appointmentDate" required>
+    </div>
+    
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Book Appointment</button>
+        <a href="/user/appointments" class="btn btn-secondary">Cancel</a>
+    </div>
+</form> -->
+<!-- <h1>Book New Appointment</h1>
+
+<form action="/user/appointments" method="POST" class="appointment-form"> -->
+    <!-- 1️⃣ Select Lab -->
+    <!-- <div class="form-group">
+        <label for="lab">Select Lab:</label>
+        <select id="lab" name="labId" class="form-control" required>
+            <option value="">-- Select Lab --</option>
+            <% labs.forEach(lab => { %>
+                <option value="<%= lab._id %>"><%= lab.name %> - <%= lab.address %></option>
+            <% }) %>
+        </select>
+    </div> -->
+
+    <!-- 2️⃣ Select Tests -->
+    <!-- <div class="form-group">
+        <label for="tests">Select Tests:</label>
+        <select id="tests" name="tests" multiple class="form-control" required>
+            <% tests.forEach(test => { %>
+                <option value="<%= test._id %>" data-price="<%= test.price %>">
+                    <%= test.name %> - ₹<%= test.price %> (<%= test.duration %> hours)
+                </option>
+            <% }) %>
+        </select>
+        <small class="text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple tests.</small>
+    </div> -->
+
+    <!-- 3️⃣ Appointment Date & Time -->
+    <!-- <div class="form-group">
+        <label for="appointmentDate">Appointment Date & Time:</label>
+        <input type="datetime-local" id="appointmentDate" name="appointmentDate" required class="form-control">
+    </div> -->
+
+    <!-- 4️⃣ Total Price -->
+    <!-- <div class="form-group">
+        <label>Total Price (₹):</label>
+        <input type="text" id="totalPrice" readonly class="form-control" value="0">
+    </div> -->
+
+    <!-- 5️⃣ Form Buttons -->
+    <!-- <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Book Appointment</button>
+        <a href="/user/appointments" class="btn btn-secondary">Cancel</a>
+    </div>
+</form> -->
+
+<!-- ✅ JS for Total Calculation + Date Validation -->
+<!-- <script>
+    const testsSelect = document.getElementById('tests');
+    const totalInput = document.getElementById('totalPrice');
+    const dateInput = document.getElementById('appointmentDate');
+
+    // 🔹 Set minimum datetime to current time
+    function setMinDateTime() {
+        const now = new Date();
+        const localISOTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+            .toISOString()
+            .slice(0, 16);
+        dateInput.min = localISOTime;
+    }
+
+    // 🔹 Validate if selected date/time is in the future
+    dateInput.addEventListener('change', () => {
+        const selected = new Date(dateInput.value);
+        const now = new Date();
+        if (selected < now) {
+            alert('Please select a future date and time.');
+            dateInput.value = '';
+        }
+    });
+
+    // 🔹 Auto-calculate total ₹
+    testsSelect.addEventListener('change', () => {
+        let total = 0;
+        Array.from(testsSelect.selectedOptions).forEach(option => {
+            total += parseFloat(option.getAttribute('data-price')) || 0;
+        });
+        totalInput.value = total.toFixed(2);
+    });
+
+    // Run setup on page load
+    setMinDateTime();
+</script> -->
+<!-- <script>
+    const testsSelect = document.getElementById('tests');
+    const totalInput = document.getElementById('totalPrice');
+    const dateInput = document.getElementById('appointmentDate');
+
+    // 🔹 Set minimum datetime to current time (ISO format adjusted for local timezone)
+    function setMinDateTime() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // adjust for timezone
+        const localISOTime = now.toISOString().slice(0, 16);
+        dateInput.min = localISOTime;
+    }
+
+    // 🔹 Validate that selected datetime is >= current time
+    dateInput.addEventListener('change', () => {
+        const selected = new Date(dateInput.value);
+        const now = new Date();
+        if (selected.getTime() < now.getTime() - 60000) { // allow up to 1 min difference
+            alert('Please select a current or future date and time.');
+            dateInput.value = '';
+        }
+    });
+
+    // 🔹 Auto-calculate total ₹
+    testsSelect.addEventListener('change', () => {
+        let total = 0;
+        Array.from(testsSelect.selectedOptions).forEach(option => {
+            total += parseFloat(option.getAttribute('data-price')) || 0;
+        });
+        totalInput.value = total.toFixed(2);
+    });
+
+    // Run setup on page load
+    setMinDateTime();
+</script> -->
+
+<h1>Book New Appointment</h1>
+
+<form action="/user/appointments" method="POST" class="appointment-form">
+    <!-- 1️⃣ Select Lab -->
+    <div class="form-group">
+        <label for="lab">Select Lab:</label>
+        <select id="lab" name="labId" class="form-control" required>
+            <option value="">-- Select Lab --</option>
+            <% labs.forEach(lab => { %>
+                <option value="<%= lab._id %>"><%= lab.name %> - <%= lab.address %></option>
+            <% }) %>
+        </select>
+    </div>
+
+    <!-- 2️⃣ Select Tests -->
+    <div class="form-group">
+        <label for="tests">Select Tests:</label>
+        <select id="tests" name="tests" multiple class="form-control" required>
+            <% tests.forEach(test => { %>
+                <option value="<%= test._id %>" data-price="<%= test.price %>">
+                    <%= test.name %> - ₹<%= test.price %> (<%= test.duration %> hours)
+                </option>
+            <% }) %>
+        </select>
+        <small class="text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple tests.</small>
+    </div>
+
+    <!-- 3️⃣ Appointment Date & Time -->
+    <div class="form-group">
+        <label for="appointmentDate">Appointment Date & Time:</label>
+        <input type="datetime-local" id="appointmentDate" name="appointmentDate" required class="form-control">
+        <small class="text-muted">Please select a current or future date and time.</small>
+    </div>
+
+    <!-- 4️⃣ Total Price -->
+    <div class="form-group">
+        <label>Total Price (₹):</label>
+        <input type="text" id="totalPrice" readonly class="form-control" value="0">
+    </div>
+
+    <!-- 5️⃣ Form Buttons -->
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Book Appointment</button>
+        <a href="/user/appointments" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+<script>
+    const testsSelect = document.getElementById('tests');
+    const totalInput = document.getElementById('totalPrice');
+    const dateInput = document.getElementById('appointmentDate');
+
+    // 🔹 Set minimum datetime to current local time
+    function setMinDateTime() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        const localISOTime = now.toISOString().slice(0, 16);
+        dateInput.min = localISOTime;
+    }
+
+    // 🔹 Validate that selected date/time is in the future
+    dateInput.addEventListener('change', () => {
+        const selected = new Date(dateInput.value);
+        const now = new Date();
+        if (selected.getTime() < now.getTime() - 60000) { // allow slight delay margin
+            alert('Please select a future date and time.');
+            dateInput.value = '';
+        }
+    });
+
+    // 🔹 Auto-calculate total price
+    testsSelect.addEventListener('change', () => {
+        let total = 0;
+        Array.from(testsSelect.selectedOptions).forEach(option => {
+            total += parseFloat(option.getAttribute('data-price')) || 0;
+        });
+        totalInput.value = total.toFixed(2);
+    });
+
+    // Initialize min datetime on load
+    setMinDateTime();
+</script>

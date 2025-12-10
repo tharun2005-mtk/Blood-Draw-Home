@@ -1,0 +1,95 @@
+<h1>All Lab Tests</h1>
+
+<% if (tests && tests.length > 0) { %>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Test</th>
+        <th>Patient</th>
+        <th>Phlebotomist</th>
+        <th>Appointment Date</th>
+        <th>Status</th>
+        <th>Sample Collected</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% tests.forEach(test => { %>
+        <tr>
+          <!-- Test name (tests is an ARRAY of Test refs) -->
+          <td>
+            <% if (test.tests && test.tests.length > 0) { %>
+              <%= test.tests.map(t => t.name).join(', ') %>
+            <% } else { %>
+              Unknown Test
+            <% } %>
+          </td>
+
+          <!-- Patient -->
+          <td>
+            <%= test.user ? test.user.name : 'N/A' %>
+          </td>
+
+          <!-- Phlebotomist (may be null) -->
+          <td>
+            <%= test.phlebotomist ? test.phlebotomist.name : 'Not assigned' %>
+          </td>
+
+          <!-- Appointment date & time -->
+          <td>
+            <% if (test.appointmentDate) { %>
+              <%= test.appointmentDate.toLocaleDateString() %><br>
+              <small><%= test.appointmentDate.toLocaleTimeString() %></small>
+            <% } else { %>
+              N/A
+            <% } %>
+          </td>
+
+          <!-- Status -->
+          <td>
+            <span class="status-<%= test.status %>">
+              <%= test.status %>
+            </span>
+          </td>
+
+          <!-- Sample collected -->
+          <td>
+            <% if (test.sampleCollected) { %>
+              <span class="status-completed">Yes</span>
+              <% if (test.sampleCollectedAt) { %>
+                <br>
+                <small><%= test.sampleCollectedAt.toLocaleDateString() %></small>
+              <% } %>
+            <% } else { %>
+              <span class="status-pending">No</span>
+            <% } %>
+          </td>
+
+          <!-- Actions -->
+          <td>
+            <% if (!test.result) { %>
+              <!-- No result yet => allow lab to update -->
+              <a href="/lab/tests/<%= test._id %>/result"
+                 class="btn btn-primary btn-small">
+                Update Result
+              </a>
+            <% } else { %>
+              <!-- Result present -->
+              <span class="status-completed">Completed</span>
+              <% if (test.reportFile) { %>
+                <br>
+                <a href="/reports/<%= test.reportFile %>" 
+                   class="btn btn-secondary btn-small" 
+                   target="_blank">
+                  View Report
+                </a>
+              <% } %>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } else { %>
+  <p>No tests found for this lab.</p>
+<% } %>

@@ -1,0 +1,88 @@
+<h1>Lab Dashboard</h1>
+
+<div class="dashboard-grid">
+
+  <!-- Pending Tests -->
+  <div class="card">
+    <h3>Pending Tests</h3>
+
+    <% if (pendingTests && pendingTests.length > 0) { %>
+      <div class="test-list">
+        <% pendingTests.forEach(test => { %>
+          <div class="test-item">
+            <strong>
+              <% if (test.tests && test.tests.length > 0) { %>
+                <%= test.tests[0].name %>
+              <% } else { %>
+                Unknown Test
+              <% } %>
+            </strong>
+
+            <p>Patient:
+              <%= test.user ? test.user.name : 'N/A' %>
+            </p>
+
+            <p>Phlebotomist:
+              <%= test.phlebotomist ? test.phlebotomist.name : 'N/A' %>
+            </p>
+
+            <p>Sample Collected:
+              <% if (test.sampleCollectedAt) { %>
+                <%= test.sampleCollectedAt.toLocaleString() %>
+              <% } else { %>
+                Not recorded
+              <% } %>
+            </p>
+
+            <a href="/lab/tests/<%= test._id %>/result"
+               class="btn btn-primary btn-small">
+              Update Result
+            </a>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No pending tests.</p>
+    <% } %>
+  </div>
+
+  <!-- Recently Completed Tests -->
+  <div class="card">
+    <h3>Recently Completed Tests</h3>
+
+    <% if (completedTests && completedTests.length > 0) { %>
+      <div class="test-list">
+        <% completedTests.forEach(test => { %>
+          <div class="test-item">
+            <strong>
+              <% if (test.tests && test.tests.length > 0) { %>
+                <%= test.tests[0].name %>
+              <% } else { %>
+                Unknown Test
+              <% } %>
+            </strong>
+
+            <p>Patient:
+              <%= test.user ? test.user.name : 'N/A' %>
+            </p>
+
+            <p>Result Date:
+              <% if (test.resultDate) { %>
+                <%= test.resultDate.toLocaleString() %>
+              <% } else { %>
+                Not recorded
+              <% } %>
+            </p>
+
+            <p>Status:
+              <span class="status-completed">Completed</span>
+            </p>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No completed tests.</p>
+    <% } %>
+  </div>
+
+</div>

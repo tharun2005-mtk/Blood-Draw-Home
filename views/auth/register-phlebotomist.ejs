@@ -1,0 +1,416 @@
+<!-- <div class="auth-container">
+    <div class="auth-card">
+        <h2>Register as Phlebotomist</h2>
+        <form action="/register-phlebotomist" method="POST">
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="specialization">Specialization:</label>
+                <input type="text" id="specialization" name="specialization" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="licenseNumber">License Number:</label>
+                <input type="text" id="licenseNumber" name="licenseNumber" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+        
+        <div class="auth-links">
+            <p>Already have an account? <a href="/login">Login here</a></p>
+            <p>Are you a patient? <a href="/register">Register as User</a></p>
+        </div>
+    </div>
+</div> -->
+<!-- <div class="auth-container">
+    <div class="auth-card">
+        <h2>Register as Phle</h2>
+        <form action="/register" method="POST" id="registerForm" novalidate>
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required minlength="2" maxlength="50">
+                <small class="form-text">2-50 characters</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required 
+                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                <small class="form-text" id="email-feedback">We'll never share your email</small>
+                <div class="validation-feedback" id="email-validation"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required minlength="6">
+                <small class="form-text">Minimum 6 characters</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div class="validation-feedback" id="password-validation"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required 
+                       pattern="[0-9]{10,15}">
+                <small class="form-text">10-15 digits only</small>
+                <div class="validation-feedback" id="phone-validation"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows="3" maxlength="200"></textarea>
+                <small class="form-text">Optional</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="dateOfBirth">Date of Birth:</label>
+                <input type="date" id="dateOfBirth" name="dateOfBirth">
+                <small class="form-text">Optional</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="bloodGroup">Blood Group:</label>
+                <select id="bloodGroup" name="bloodGroup">
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+                <small class="form-text">Optional</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" id="submit-btn">Register</button>
+        </form>
+        
+        <div class="auth-links">
+            <p>Already have an account? <a href="/login">Login here</a></p>
+            <p>Are you a phlebotomist? <a href="/register-phlebotomist">Register as Phlebotomist</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Real-time validation
+document.addEventListener('DOMContentLoaded', function() {
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const submitBtn = document.getElementById('submit-btn');
+    
+    let emailValid = false;
+    let phoneValid = false;
+    let passwordValid = false;
+    
+    // Email validation with debounce
+    let emailTimeout;
+    emailInput.addEventListener('input', function() {
+        clearTimeout(emailTimeout);
+        emailTimeout = setTimeout(validateEmail, 500);
+    });
+    
+    // Phone validation with debounce
+    let phoneTimeout;
+    phoneInput.addEventListener('input', function() {
+        clearTimeout(phoneTimeout);
+        phoneTimeout = setTimeout(validatePhone, 500);
+    });
+    
+    // Password validation
+    passwordInput.addEventListener('input', validatePassword);
+    confirmPasswordInput.addEventListener('input', validatePassword);
+    
+    function validateEmail() {
+        const email = emailInput.value.trim();
+        const emailValidation = document.getElementById('email-validation');
+        
+        if (!email) {
+            showValidation(emailValidation, 'Email is required', 'error');
+            emailValid = false;
+            updateSubmitButton();
+            return;
+        }
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showValidation(emailValidation, 'Please enter a valid email', 'error');
+            emailValid = false;
+            updateSubmitButton();
+            return;
+        }
+        
+        // Check email availability via API
+        fetch('/check-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.available) {
+                showValidation(emailValidation, data.message, 'success');
+                emailValid = true;
+            } else {
+                showValidation(emailValidation, data.message, 'error');
+                emailValid = false;
+            }
+            updateSubmitButton();
+        })
+        .catch(error => {
+            console.error('Email validation error:', error);
+            showValidation(emailValidation, 'Error checking email availability', 'error');
+            emailValid = false;
+            updateSubmitButton();
+        });
+    }
+    
+    function validatePhone() {
+        const phone = phoneInput.value;
+        const phoneValidation = document.getElementById('phone-validation');
+        const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+        
+        if (!phone) {
+            showValidation(phoneValidation, 'Phone number is required', 'error');
+            phoneValid = false;
+            updateSubmitButton();
+            return;
+        }
+        
+        const phoneRegex = /^[0-9]{10,15}$/;
+        if (!phoneRegex.test(cleanPhone)) {
+            showValidation(phoneValidation, 'Phone must be 10-15 digits', 'error');
+            phoneValid = false;
+            updateSubmitButton();
+            return;
+        }
+        
+        // Check phone availability via API
+        fetch('/check-phone', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ phone: cleanPhone })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.available) {
+                showValidation(phoneValidation, data.message, 'success');
+                phoneValid = true;
+            } else {
+                showValidation(phoneValidation, data.message, 'error');
+                phoneValid = false;
+            }
+            updateSubmitButton();
+        })
+        .catch(error => {
+            console.error('Phone validation error:', error);
+            showValidation(phoneValidation, 'Error checking phone availability', 'error');
+            phoneValid = false;
+            updateSubmitButton();
+        });
+    }
+    
+    function validatePassword() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        const passwordValidation = document.getElementById('password-validation');
+        
+        if (password.length < 6) {
+            showValidation(passwordValidation, 'Password must be at least 6 characters', 'error');
+            passwordValid = false;
+        } else if (password !== confirmPassword) {
+            showValidation(passwordValidation, 'Passwords do not match', 'error');
+            passwordValid = false;
+        } else {
+            showValidation(passwordValidation, 'Passwords match', 'success');
+            passwordValid = true;
+        }
+        
+        updateSubmitButton();
+    }
+    
+    function showValidation(element, message, type) {
+        element.textContent = message;
+        element.className = `validation-feedback ${type}`;
+    }
+    
+    function updateSubmitButton() {
+        submitBtn.disabled = !(emailValid && phoneValid && passwordValid);
+    }
+    
+    // Initial validation
+    validateEmail();
+    validatePhone();
+    validatePassword();
+});
+</script> -->
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Register as Phlebotomist</h2>
+
+        <form action="/register-phlebotomist" method="POST" id="registerForm" novalidate>
+
+            <!-- Full Name -->
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required minlength="2" maxlength="50">
+                <small class="form-text">2-50 characters</small>
+            </div>
+
+            <!-- Email (NO AJAX VALIDATION) -->
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                >
+                <small class="form-text">We'll never share your email</small>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required minlength="6">
+                <small class="form-text">Minimum 6 characters</small>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div class="validation-feedback" id="password-validation"></div>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input 
+                    type="tel" 
+                    id="phone" 
+                    name="phone" 
+                    required
+                    pattern="[0-9]{10,15}"
+                >
+                <small class="form-text">10-15 digits only</small>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows="3" maxlength="200"></textarea>
+                <small class="form-text">Optional</small>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="form-group">
+                <label for="dateOfBirth">Date of Birth:</label>
+                <input type="date" id="dateOfBirth" name="dateOfBirth">
+                <small class="form-text">Optional</small>
+            </div>
+
+            <!-- Specialization -->
+            <div class="form-group">
+                <label for="specialization">Specialization:</label>
+                <input 
+                    type="text" 
+                    id="specialization" 
+                    name="specialization" 
+                    placeholder="Eg: Blood Sample Collection"
+                    required
+                >
+            </div>
+
+            <!-- License Number -->
+            <div class="form-group">
+                <label for="licenseNumber">License Number:</label>
+                <input 
+                    type="text" 
+                    id="licenseNumber" 
+                    name="licenseNumber" 
+                    required
+                    minlength="4"
+                    maxlength="50"
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+                Register
+            </button>
+
+        </form>
+
+        <div class="auth-links">
+            <p>Already have an account? <a href="/login">Login here</a></p>
+            <p>Are you a user? <a href="/register">Register as User</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Only password match validation
+document.addEventListener("DOMContentLoaded", () => {
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const validationBox = document.getElementById("password-validation");
+    const submitBtn = document.getElementById("submit-btn");
+
+    function validatePasswords() {
+        if (passwordInput.value.length < 6) {
+            validationBox.textContent = "Password must be at least 6 characters";
+            validationBox.className = "validation-feedback error";
+            submitBtn.disabled = true;
+        } else if (passwordInput.value !== confirmPasswordInput.value) {
+            validationBox.textContent = "Passwords do not match";
+            validationBox.className = "validation-feedback error";
+            submitBtn.disabled = true;
+        } else {
+            validationBox.textContent = "Passwords match";
+            validationBox.className = "validation-feedback success";
+            submitBtn.disabled = false;
+        }
+    }
+
+    passwordInput.addEventListener("input", validatePasswords);
+    confirmPasswordInput.addEventListener("input", validatePasswords);
+});
+</script>

@@ -1,0 +1,62 @@
+<h1>Update Test Result</h1>
+
+<div class="card">
+  <h3>Test Details</h3>
+
+  <p><strong>Patient:</strong> <%= test.user ? test.user.name : 'N/A' %></p>
+
+  <p><strong>Test:</strong>
+    <% if (test.tests && test.tests.length > 0) { %>
+      <%= test.tests[0].name %>
+    <% } else { %>
+      Unknown Test
+    <% } %>
+  </p>
+
+  <p><strong>Sample Collected:</strong>
+    <% if (test.sampleCollectedAt) { %>
+      <%= test.sampleCollectedAt.toLocaleDateString() %>
+    <% } else { %>
+      Not recorded
+    <% } %>
+  </p>
+</div>
+
+<!-- ✅ Plain POST, no ?_method=PUT and no hidden _method -->
+<form
+  action="/lab/tests/<%= test._id %>/result"
+  method="POST"
+  enctype="multipart/form-data"
+  class="form"
+>
+  <div class="form-group">
+    <label for="result">Result</label>
+    <textarea
+      name="result"
+      id="result"
+      rows="4"
+      required
+    ><%= test.result || '' %></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="notes">Notes (optional)</label>
+    <textarea
+      name="notes"
+      id="notes"
+      rows="3"
+    ><%= test.notes || '' %></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="reportFile">Attach PDF Report (optional)</label>
+    <input
+      type="file"
+      name="reportFile"
+      id="reportFile"
+      accept="application/pdf"
+    >
+  </div>
+
+  <button type="submit" class="btn btn-primary">Save Result</button>
+</form>
